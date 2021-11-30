@@ -1,5 +1,8 @@
 package spring.iocContainer;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class StringPrinter implements Printer {
 
     private StringBuffer buffer = new StringBuffer();

@@ -97,15 +97,4 @@ public class ApplicationContextTest {
         assertThat(printer.toString(), is("Hello Spring"));
     }
 
-    @Test
-    public void simpleBeanScanning() {
-        ApplicationContext ctx = new AnnotationConfigApplicationContext(AnnotatedHelloConfig.class);
-        //@Configuration 자체도 빈으로 등록
-        AnnotatedHelloConfig annotatedHelloConfig = ctx.getBean("annotatedHelloConfig", AnnotatedHelloConfig.class);
-        assertThat(annotatedHelloConfig, is(notNullValue()));
-        
-        AnnotatedHello hello = ctx.getBean("annotatedHello", AnnotatedHello.class);
-        assertThat(hello, is(notNullValue()));
-    }
-
 }
