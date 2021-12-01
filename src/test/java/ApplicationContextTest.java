@@ -1,5 +1,6 @@
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.PropertiesBeanDefinitionReader;
@@ -7,12 +8,16 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import spring.iocContainer.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -95,6 +100,27 @@ public class ApplicationContextTest {
         hello.print();
 
         assertThat(printer.toString(), is("Hello Spring"));
+    }
+
+    //prototype으로 설정하면 매번 객체를 새로 생성
+    @Scope("prototype")
+    static class SingletonBean {}
+    static class SingletonClientBean {
+        @Autowired SingletonBean bean1;
+        @Autowired SingletonBean bean2;
+    }
+
+    @Test
+    public void singletonScope() {
+        ApplicationContext ac = new AnnotationConfigApplicationContext(SingletonBean.class, SingletonClientBean.class);
+        Set<SingletonBean> beans = new HashSet<>();
+        beans.add(ac.getBean(SingletonBean.class));
+        beans.add(ac.getBean(SingletonBean.class));
+        assertThat(beans.size(), is(2));
+
+        beans.add(ac.getBean(SingletonClientBean.class).bean1);
+        beans.add(ac.getBean(SingletonClientBean.class).bean2);
+        assertThat(beans.size(), is(4));
     }
 
 }

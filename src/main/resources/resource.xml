@@ -9,10 +9,24 @@
 
     <!-- XML로 등록된 빈의 의존관계 정보 어노테이션을 이용해서 의존관계 메타정보를 추가해주는 빈 후처리기 등록 -->
     <context:annotation-config />
+    <!--
+        property-placeholder 태그에 의해 자동으로 등록되는 PropertyPlaceHolderConfigurer 빈이 담당하며
+        빈 팩토리 후처리기이며 빈 후처리기와 동작 시기와 동작 대상이 다르다
+        빈 설정 메타정보가 모두 준비 됐을 때 빈 메타정보 자체를 조작하기 위해 사용
+        property에 치환값을 사용하면 처음 설정값은 ${치환 명}으로 등록 되어 있다가 빈 팩토리 후처리기에 의해 값이 변경되는 구조
+    -->ㄴ
+    <context:property-placeholder location="database.properties" />
 
     <bean id="hello" class="spring.iocContainer.Hello">
         <property name="name" value="Spring" />
     </bean>
 
     <bean id="printer" class="spring.iocContainer.StringPrinter" />
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driverClass" value="${db.driverClass}" />
+        <property name="url" value="${db.url}" />
+        <property name="username" value="${db.username}" />
+        <property name="password" value="${db.password}" />
+    </bean>
 </beans>
