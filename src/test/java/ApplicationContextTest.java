@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.context.support.StaticApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import spring.iocContainer.*;
@@ -123,4 +124,9 @@ public class ApplicationContextTest {
         assertThat(beans.size(), is(4));
     }
 
+    @Test
+    public void applicationContextSetTest() {
+        GenericXmlApplicationContext xmlContext = new GenericXmlApplicationContext();
+        xmlContext.getEnvironment().setPlaceholderPrefix("dev");
+    }
 }
